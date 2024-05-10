@@ -33,6 +33,9 @@ export async function POST(req: Request) {
                 return Response.json({ message: "Password does not match", status: false })
             }
         }
+        else{
+            return Response.json({message:"No user found"  , status:false})
+        }
 
     } catch (error) {
         return Response.json({ message: "Internal server error", status: false })
