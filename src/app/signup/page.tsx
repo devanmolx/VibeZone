@@ -3,6 +3,8 @@ import axios from "axios";
 import React, { useState } from 'react'
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from 'react-toastify';
+import Image from "next/image"
+import logo from "@/asset/logo.png"
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from "@/components/Loading";
 
@@ -75,12 +77,15 @@ export default function Signup() {
 
     return (
         <>
-            <div className="h-screen flex justify-center flex-col bg-slate-600">
+            <div className="h-screen flex justify-center flex-col bg-gray-700">
                 <div className="flex justify-center">
-                    <div className="block max-w-sm p-6 bg-slate-700 rounded-lg shadow cursor-pointer ">
+                    <div className="block max-w-sm p-6 bg-[#1F1B25] rounded-lg shadow cursor-pointer ">
                         <div className=" flex flex-col items-center justify-center">
-                            <div>
-                                <div className="text-3xl font-extrabold text-white">
+                            <div className=" flex flex-col gap-2">
+                                <div>
+                                    <Image src={logo} alt="" />
+                                </div>
+                                <div className="text-2xl font-semibold text-white text-center">
                                     Sign up
                                 </div>
                             </div>
