@@ -1,9 +1,10 @@
 "use client"
 import Post from '@/components/Post';
 import axios from 'axios';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserContext } from '../context/UserContext';
 
 interface PostType {
     caption: string;
@@ -19,20 +20,24 @@ interface PostType {
 }
 
 const Page = () => {
-
+    const {user} = useContext(UserContext)
     const [posts, setPosts] = useState<PostType[]>();
 
     useEffect(() => {
-        fetchPosts()
-    }, [])
+        if(user._id){
+            fetchPosts()
+        }
+    }, [user])
 
     async function fetchPosts() {
-        const response = await axios.post("/api/post/likedPosts", { token: localStorage.getItem("token") })
-        if (response.data.status) {
-            setPosts(response.data.message)
-        }
-        else {
-            toast.error(response.data.message)
+        if(user){
+            const response = await axios.post("/api/post/likedPosts", { token: user._id})
+            if (response.data.status) {
+                setPosts(response.data.message)
+            }
+            else {
+                toast.error(response.data.message)
+            }
         }
     }
 

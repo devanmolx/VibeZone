@@ -1,7 +1,8 @@
-"use client"
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import People from '@/components/People';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/authOptions';
 
 interface UserType {
     _id: string;
@@ -19,21 +20,17 @@ interface UserType {
     __v: number;
 }
 
-const Page = () => {
+const Page = async () => {
+    let people : UserType[] = [] 
+    const session = await getServerSession(authOptions);
 
-    const [people, setPeople] = useState<UserType[]>();
-
-    useEffect(() => {
-        fetchUsers()
-    }, [])
-
-    async function fetchUsers() {
-        const response = await axios.post("/api/user/all", { token: localStorage.getItem("token") })
+    if(session && session.user && session.user.id){
+        const response = await axios.post(`${process.env.WEBSITE_URL}/api/user/all`, { token: session.user.id })
         if (response.status) {
-            setPeople(response.data.message);
+            people = response.data.message;
         }
         else {
-
+            
         }
     }
 
@@ -41,7 +38,7 @@ const Page = () => {
         <div className='h-full w-full flex flex-col items-center gap-10 md:p-8 no-scrollbar'>
             <div className=' flex flex-col'>
                 {people?.map(user => (
-                    <People user={user} key={user._id} />
+                    <People user={user} key={user._id} token={session.user.id} />
                 ))}
             </div>
         </div>

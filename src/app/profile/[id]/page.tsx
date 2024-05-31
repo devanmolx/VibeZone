@@ -1,6 +1,4 @@
-"use client"
-import React, { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import React from 'react'
 import Image from "next/image"
 import axios from 'axios'
 import Post from '@/components/Post'
@@ -35,37 +33,20 @@ interface PostType {
     _id: string;
 }
 
-const Page = () => {
+export default async function Page({ params }: { params: { id: string } }) {
 
-    const { id } = useParams()
-    const [user, setUser] = useState<UserType>();
-    const [posts, setPosts] = useState<PostType[]>();
-    const [isLoading, setIsLoading] = useState(true)
-    const router = useRouter()
+    const id = params.id
 
-    useEffect(() => {
-        fetchUser()
-    }, [])
+    let user: UserType = {_id: '',name: '',username: '',email: '',password: '',imageUrl: '',posts: [],savedPosts: [],likedPosts: [],followers: [],following: [],createdAt: new Date(),__v: 0};
+    let posts : PostType[] = []
 
-    async function fetchUser() {
-        const response = await axios.post(`/api/user/me`, { token: id });
-        const postsResponse = await axios.post("/api/post/user", { token: id })
-        if (response.data.status) {
-            setUser(response.data.message)
-            setPosts(postsResponse.data.message)
-            setIsLoading(false)
-        }
-        else {
-            router.push("/")
-        }
+    const response = await axios.post(`${process.env.WEBSITE_URL}/api/user/me`, { token: id });
+    const postsResponse = await axios.post(`${process.env.WEBSITE_URL}/api/post/user`, { token: id })
+    if (response.data.status) {
+        user = response.data.message
+        posts = Array.isArray(postsResponse.data.message) ? postsResponse.data.message : [postsResponse.data.message]
     }
-    if (isLoading) {
-        return (
-            <div className="bg-[#1F1826] w-full h-full flex items-center justify-center">
-                <p className=" text-2xl text-white">Loading.....</p>
-            </div>
-        )
-    }
+    
 
     return (
         <div className=' w-full h-full flex flex-col items-center gap-10 p-8 overflow-y-scroll no-scrollbar'>
@@ -102,5 +83,3 @@ const Page = () => {
         </div>
     )
 }
-
-export default Page

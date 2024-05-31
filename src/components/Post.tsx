@@ -1,12 +1,13 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import axios from 'axios';
+import { UserContext } from '@/app/context/UserContext';
 
 interface PostProps {
     post: {
@@ -20,12 +21,13 @@ interface PostProps {
         username: string;
         __v: number;
         _id: string;
-    };
+    }
 }
 
 const Post: React.FC<PostProps> = ({ post }) => {
 
-    const token = localStorage.getItem("token")
+    const {user} = useContext(UserContext)
+    const token = user._id
     const pathname = usePathname()
     const [expanded, setExpanded] = useState(false)
     const [isLiked, setIsLiked] = useState(token && post.likes.includes(token))
@@ -70,7 +72,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
                 </div>
                 <div className=' text-white w-full'>
                     <button className=' text-2xl font-bold' onClick={handleLike}>
-                        {!isLiked ? <FaRegHeart /> : <FaHeart className=' text-red-600' />}
+                        {isLiked ? <FaHeart className=' text-red-600' />  : <FaRegHeart />}
                     </button>
                 </div>
             </div>

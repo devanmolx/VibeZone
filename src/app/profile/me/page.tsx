@@ -1,10 +1,10 @@
-"use client"
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
 import Image from "next/image"
 import axios from 'axios'
 import Post from '@/components/Post'
 import avatar from "@/asset/avatar.png"
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/authOptions'
 
 interface UserType {
     _id: string;
@@ -35,42 +35,24 @@ interface PostType {
     _id: string;
 }
 
-const Page = () => {
+const Page = async () => {
 
-    const [user, setUser] = useState<UserType>();
-    const [posts, setPosts] = useState<PostType[]>();
-    const [isLoading, setIsLoading] = useState(true)
-    const router = useRouter()
+    const session = await getServerSession(authOptions)
+    let user: UserType = {_id: '',name: '',username: '',email: '',password: '',imageUrl: '',posts: [],savedPosts: [],likedPosts: [],followers: [],following: [],createdAt: new Date(),__v: 0};
+    let posts : PostType[] = []
 
-    useEffect(() => {
-        fetchUser()
-    }, [])
-
-    async function fetchUser() {
-        const response = await axios.post(`/api/user/me`, { token: localStorage.getItem("token") });
-        const postsResponse = await axios.post("/api/post/user", { token: localStorage.getItem("token") })
-        if (response.data.status) {
-            setUser(response.data.message)
-            setPosts(postsResponse.data.message)
-            setIsLoading(false)
-        }
-        else {
-            router.push("/")
-        }
-    }
-    if (isLoading) {
-        return (
-            <div className="bg-[#1F1826] w-full h-full flex items-center justify-center">
-                <p className=" text-2xl text-white">Loading.....</p>
-            </div>
-        )
+    const response = await axios.post(`${process.env.WEBSITE_URL}/api/user/me`, { token: session.user.id });
+    const postsResponse = await axios.post(`${process.env.WEBSITE_URL}/api/post/user`, { token: session.user.id })
+    if (response.data.status) {
+        user = response.data.message;
+        posts = postsResponse.data.message
     }
 
     return (
         <div className=' w-full h-full flex flex-col items-center gap-10 p-8 overflow-y-scroll no-scrollbar'>
             <div className=' flex items-center gap-10 flex-wrap justify-center'>
-                <div className=' relative w-[130px] h-[130px] rounded-full overflow-hidden'>
-                    <Image src={user?.imageUrl || avatar} alt='' height={5000} width={5000} className=' h-full' />
+                <div className=' flex items-center relative w-[130px] h-[130px] rounded-full overflow-hidden'>
+                    <Image src={user?.imageUrl || avatar} alt='' height={5000} width={5000} className=' w-full' />
                 </div>
                 <div className=' flex flex-col items-center gap-4'>
                     <div className=' flex flex-col gap-2'>

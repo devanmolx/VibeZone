@@ -1,12 +1,10 @@
-"use client"
-
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getServerSession } from "next-auth";
+import { redirect } from 'next/navigation'
 import Post from "@/components/Post"
-import Loading from "@/components/Loading";
+import { authOptions } from "@/lib/authOptions";
 
 interface Post {
   caption: string;
@@ -21,38 +19,24 @@ interface Post {
   _id: string;
 }
 
-export default function Home() {
-  const router = useRouter()
-  const [posts, setPosts] = useState<Post[]>()
-  const [isloading, setIsloading] = useState(true)
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/signin');
-      return
-    }
-    else {
-      fetchPosts()
-    }
-  }, [router]);
-
-  async function fetchPosts() {
-    const response = await axios.post("/api/post/all", JSON.stringify({ token: localStorage.getItem("token") }))
-    if (response.data.status) {
-      setPosts(response.data.message)
-      setIsloading(false)
-    }
-    else {
-      toast.error(response.data.message)
-    }
+export default async function Home() {
+  
+  const session = await getServerSession(authOptions);
+  if(!session){
+    redirect("/api/auth/signin")
   }
 
-  if (isloading) {
-    return (
-      <Loading />
-    )
+  let posts : Post[] = []
+
+  const response = await axios.post(`${process.env.WEBSITE_URL}/api/post/all`, JSON.stringify({ token: session.user.id }))
+  if (response.data.status) {
+    posts = Array.isArray(response.data.message) ? response.data.message : [response.data.message];
   }
+  else {
+    toast.error(response.data.message)
+  }
+  
+
   return (
     <div className=" h-full w-full flex flex-col items-center gap-10 md:p-8 no-scrollbar">
       <div className="flex flex-col ">
@@ -62,7 +46,6 @@ export default function Home() {
         {posts?.map(post => (
           <Post post={post} key={post._id} />
         ))}
-
       </div>
       <ToastContainer />
     </div>

@@ -18,12 +18,12 @@ export async function POST(req:Request) {
     const caption = body.get("caption")
     const postImage = body.get("postImage") as File
 
-    try {
-        const validatedData = PostSchema.parse({creator , caption })
-    } catch (error) {
-        console.error('Validation error:', error);
-        return Response.json({ message: 'Validation failed', status: false });
-    }
+    // try {
+    //     const validatedData = PostSchema.parse({creator , caption })
+    // } catch (error) {
+    //     console.error('Validation error:', error);
+    //     return Response.json({ message: 'Validation failed', status: false });
+    // }
 
     const user = await User.findById(creator);
     if(!user){
@@ -39,7 +39,7 @@ export async function POST(req:Request) {
 
     const postImageUrl = await getDownloadURL(ref(storage, `profileImages/${date}`))
 
-    const post = await Post.create({creator ,name:user.name, username:user.username , profilePhoto:user.imageUrl,  caption , postImageUrl})
+    const post = await Post.create({creator ,name:user.name,  caption , postImageUrl, profilePhoto:user.imageUrl , username :user.username})
 
     await User.findByIdAndUpdate(creator , {$push:{posts : post._id}})
 

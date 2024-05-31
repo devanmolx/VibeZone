@@ -19,12 +19,12 @@ interface UserType {
         following: string[];
         createdAt: Date;
         __v: number;
-    }
+    },
+    token:string
 }
 
-const People: React.FC<UserType> = ({ user }) => {
+const People: React.FC<UserType> = ({ user , token }) => {
 
-    const token = localStorage.getItem("token");
     const [isFollowing, setisFollowing] = useState(token && user && user.followers && user.followers.includes(token))
 
     async function handleFollow() {
