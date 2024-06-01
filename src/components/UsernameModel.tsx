@@ -49,6 +49,8 @@ const UsernameModel: React.FC<PropsType> = ({ imageUrl, id }) => {
             if (response.data.status) {
                 await updateUser();
                 toast.success("User updated successfully");
+                window.location.reload();
+
             } else {
                 toast.error(response.data.message);
             }
@@ -70,6 +72,8 @@ const UsernameModel: React.FC<PropsType> = ({ imageUrl, id }) => {
             if (response.data.status) {
                 await updateUser();
                 toast.success("User updated successfully");
+                window.location.reload();
+
             } else {
                 toast.error(response.data.message);
             }

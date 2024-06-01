@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import Image from 'next/image';
 import Link from "next/link"
 import axios from 'axios';
+import { toast , ToastContainer } from 'react-toastify';
+import useUpdateUser from '@/lib/updateUser';
 
 interface UserType {
     user: {
@@ -25,14 +27,17 @@ interface UserType {
 
 const People: React.FC<UserType> = ({ user , token }) => {
 
+    const updateUser = useUpdateUser();
     const [isFollowing, setisFollowing] = useState(token && user && user.followers && user.followers.includes(token))
 
     async function handleFollow() {
         const response = await axios.post("/api/user/follow", { from: token, to: user._id })
         if (response.data.status) {
             setisFollowing(!isFollowing)
+            await updateUser();
         }
-        else {
+        else{
+            toast.error(response.data.message)
         }
     }
 
@@ -52,6 +57,7 @@ const People: React.FC<UserType> = ({ user , token }) => {
                 </div>
                 <button onClick={() => { handleFollow() }} className=' py-2 px-4 rounded-lg bg-[#7C55E7]'>{isFollowing ? "Following" : "Follow"}</button>
             </div >
+            <ToastContainer />
         </>
     )
 }
