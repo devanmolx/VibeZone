@@ -7,27 +7,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
-import { useSession } from 'next-auth/react';
-import { UserContext } from '../context/UserContext';
+import { UserContext } from '../../../context/UserContext';
 import useUpdateUser from '@/lib/updateUser';
 
 export default function Page() {
-    const { user, setUser } = useContext(UserContext);
-    const { data } = useSession();
+    const { user } = useContext(UserContext);
     const router = useRouter();
-    const [creator, setCreator] = useState("");
     const [caption, setCaption] = useState("");
     const [image, setImage] = useState<File>();
     const [previewImage, setPreviewImage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     const updateUser = useUpdateUser();
-
-    useEffect(() => {
-        if (data?.user && 'id' in data?.user) {
-            setCreator(String(data.user.id));
-        }
-    }, [data]);
 
     function handleFileInputChange(event: React.ChangeEvent<HTMLInputElement>) {
         const files = event.target.files;
@@ -60,7 +51,7 @@ export default function Page() {
         }
         const formData = new FormData();
         formData.append("caption", caption);
-        formData.append("creator", creator);
+        formData.append("creator", user._id);
         if (image) {
             formData.append("postImage", image);
         }

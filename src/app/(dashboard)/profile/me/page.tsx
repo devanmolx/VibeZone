@@ -3,8 +3,7 @@ import Image from "next/image"
 import axios from 'axios'
 import Post from '@/components/Post'
 import avatar from "@/asset/avatar.png"
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/authOptions'
+import { cookies } from 'next/headers'
 
 interface UserType {
     _id: string;
@@ -37,15 +36,20 @@ interface PostType {
 
 const Page = async () => {
 
-    const session = await getServerSession(authOptions)
     let user: UserType = {_id: '',name: '',username: '',email: '',password: '',imageUrl: '',posts: [],savedPosts: [],likedPosts: [],followers: [],following: [],createdAt: new Date(),__v: 0};
     let posts : PostType[] = []
 
-    const response = await axios.post(`${process.env.WEBSITE_URL}/api/user/me`, { token: session.user.id });
-    const postsResponse = await axios.post(`${process.env.WEBSITE_URL}/api/post/user`, { token: session.user.id })
-    if (response.data.status) {
-        user = response.data.message;
-        posts = postsResponse.data.message
+    const cookieStore = await cookies()
+    const token = cookieStore.get("token")?.value;
+
+    if (token) {
+        
+        const response = await axios.post(`${process.env.WEBSITE_URL}/api/user/me`, { token });
+        const postsResponse = await axios.post(`${process.env.WEBSITE_URL}/api/post/user`, { token })
+        if (response.data.status) {
+            user = response.data.message;
+            posts = postsResponse.data.message
+        }
     }
 
     return (

@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { useState, useEffect, useContext } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from '../context/UserContext';
+import { UserContext } from '../../../context/UserContext';
 
 interface PostType {
     caption: string;
@@ -24,7 +24,7 @@ const Page = () => {
     const [posts, setPosts] = useState<PostType[]>();
 
     useEffect(() => {
-        if(user._id){
+        if (user._id) {
             fetchPosts()
         }
     }, [user])

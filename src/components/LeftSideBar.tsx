@@ -1,6 +1,4 @@
-import { authOptions } from '@/lib/authOptions'
 import axios from 'axios';
-import { getServerSession } from 'next-auth'
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import Image from "next/image"
@@ -8,6 +6,7 @@ import logo from "@/asset/logo.png"
 import React from 'react'
 import LefSideBarComponent from "@/components/LefSideBarComponent"
 import UsernameModel from '@/components/UsernameModel';
+import { cookies } from 'next/headers'
 
 interface UserType {
     _id: string;
@@ -26,20 +25,22 @@ interface UserType {
 
 const Page = async () => {
 
-    const session = await getServerSession(authOptions);
+
+    const cookieStore = await cookies()
+
+    const token = cookieStore.get("token")?.value;
+
     let user: UserType = { _id: '', name: '', username: '', email: '', password: '', imageUrl: '', posts: [], savedPosts: [], likedPosts: [], followers: [], following: [], __v: 0 };
-    if (!session) {
-        redirect("/api/auth/signin")
+    if (!token) {
+        redirect("/signin")
     }
     else {
-        if (session.user && session.user.id) {
-            const response = await axios.post(`${process.env.WEBSITE_URL}/api/user/me`, { token: session.user.id })
-            if (response.data.status) {
-                user = response.data.message
-            }
-            else {
-                redirect("/api/auth/signin")
-            }
+        const response = await axios.post(`${process.env.WEBSITE_URL}/api/user/me`, { token })
+        if (response.data.status) {
+            user = response.data.message
+        }
+        else {
+            redirect("/signin")
         }
     }
 

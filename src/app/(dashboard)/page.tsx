@@ -1,10 +1,9 @@
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getServerSession } from "next-auth";
-import { redirect } from 'next/navigation'
 import Post from "@/components/Post"
-import { authOptions } from "@/lib/authOptions";
+import { cookies } from 'next/headers'
+import { redirect } from "next/navigation";
 
 interface Post {
   caption: string;
@@ -20,20 +19,25 @@ interface Post {
 }
 
 export default async function Home() {
-  
-  const session = await getServerSession(authOptions);
-  if(!session){
-    redirect("/api/auth/signin")
-  }
 
-  let posts : Post[] = []
+  let posts: Post[] = []
 
-  const response = await axios.post(`${process.env.WEBSITE_URL}/api/post/all`, JSON.stringify({ token: session.user.id }))
-  if (response.data.status) {
-    posts = Array.isArray(response.data.message) ? response.data.message : [response.data.message];
+  const cookieStore = await cookies()
+
+  const token = cookieStore.get("token")?.value;
+
+  if (token) {
+    
+    const response = await axios.post(`${process.env.WEBSITE_URL}/api/post/all`, JSON.stringify({ token }))
+    if (response.data.status) {
+      posts = Array.isArray(response.data.message) ? response.data.message : [response.data.message];
+    }
+    else {
+      toast.error(response.data.message)
+    }
   }
   else {
-    toast.error(response.data.message)
+    redirect("/login")
   }
   
 

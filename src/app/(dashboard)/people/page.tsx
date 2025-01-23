@@ -1,8 +1,7 @@
 import axios from 'axios';
 import React from 'react'
 import People from '@/components/People';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/authOptions';
+import { cookies } from 'next/headers'
 
 interface UserType {
     _id: string;
@@ -21,11 +20,14 @@ interface UserType {
 }
 
 const Page = async () => {
-    let people : UserType[] = [] 
-    const session = await getServerSession(authOptions);
+    let people: UserType[] = [] 
+    
+    const cookieStore = await cookies()
 
-    if(session && session.user && session.user.id){
-        const response = await axios.post(`${process.env.WEBSITE_URL}/api/user/all`, { token: session.user.id })
+    const token = cookieStore.get("token")?.value;
+
+    if(token){
+        const response = await axios.post(`${process.env.WEBSITE_URL}/api/user/all`, { token })
         if (response.status) {
             people = response.data.message;
         }
@@ -37,8 +39,8 @@ const Page = async () => {
     return (
         <div className='h-full w-full flex flex-col items-center gap-10 md:p-8 no-scrollbar'>
             <div className=' flex flex-col'>
-                {people?.map(user => (
-                    <People user={user} key={user._id} token={session.user.id} />
+                {token && people?.map(user => (
+                    <People user={user} key={user._id} token={token} />
                 ))}
             </div>
         </div>

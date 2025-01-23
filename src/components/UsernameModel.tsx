@@ -84,12 +84,12 @@ const UsernameModel: React.FC<PropsType> = ({ imageUrl, id }) => {
     }
 
     return (
-        <div className='flex items-center justify-center h-screen w-screen fixed z-50'>
+        <div className='flex items-center justify-center h-screen w-screen fixed z-50 backdrop-blur-sm'>
             <div className='flex flex-col items-center'>
                 <form className='flex flex-col gap-6 w-[90%] md:w-auto bg-black p-10 rounded-lg' onSubmit={handleSubmit}>
                     <label htmlFor="image" className='flex flex-col items-center cursor-pointer gap-5 w-full'>
                         <p className='font-semibold text-lg text-white w-full'>Upload a Photo</p>
-                        <div className='w-[200px]'>
+                        <div className='w-[200px] h-[200px] object-fill flex items-center justify-center  overflow-hidden'>
                             <Image src={previewImage || imageUrl} alt='' height={5000} width={5000} className='w-full' />
                         </div>
                     </label>

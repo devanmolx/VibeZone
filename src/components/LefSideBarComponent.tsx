@@ -8,8 +8,7 @@ import { MdOutlinePostAdd } from "react-icons/md";
 import { MdOutlinePeopleAlt } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
-import { signOut } from 'next-auth/react';
-import { UserContext } from '@/app/context/UserContext';
+import { UserContext } from '@/context/UserContext';
 
 interface PropType {
     Initialuser: {
@@ -43,7 +42,7 @@ const LefSideBarComponent: React.FC<PropType> = ({ Initialuser }) => {
     const pathname = usePathname();
 
     function handleLogout() {
-        signOut();
+        // signOut();
     }
 
     return (

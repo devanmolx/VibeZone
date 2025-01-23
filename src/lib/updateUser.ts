@@ -1,7 +1,7 @@
 "use client"
 import { useContext, useCallback } from "react";
 import axios from "axios";
-import { UserContext } from "@/app/context/UserContext";
+import { UserContext } from "@/context/UserContext";
 
 function useUpdateUser() {
     const { user, setUser } = useContext(UserContext);
