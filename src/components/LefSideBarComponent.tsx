@@ -1,5 +1,5 @@
 "use client"
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from "next/link"
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -9,6 +9,7 @@ import { MdOutlinePeopleAlt } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { UserContext } from '@/context/UserContext';
+import { useCookies } from 'react-cookie';
 
 interface PropType {
     Initialuser: {
@@ -30,7 +31,9 @@ interface PropType {
 const LefSideBarComponent: React.FC<PropType> = ({ Initialuser }) => {
 
     const { user , setUser } = useContext(UserContext);
-    const [isloading , setIsLoading] = useState(true)
+    const [isloading, setIsLoading] = useState(true)
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const router = useRouter();
 
     const displayUser = isloading ? Initialuser : user
 
@@ -42,7 +45,8 @@ const LefSideBarComponent: React.FC<PropType> = ({ Initialuser }) => {
     const pathname = usePathname();
 
     function handleLogout() {
-        // signOut();
+        removeCookie("token")
+        router.push("/signin")
     }
 
     return (
