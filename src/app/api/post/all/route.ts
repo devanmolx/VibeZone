@@ -9,6 +9,7 @@ export async function POST(req:Request) {
     const post = await Post.find({
         creator:{ $ne: token},
     })
+    .populate("creator")
     if(post){
         return Response.json({message : post , status:true})
     }

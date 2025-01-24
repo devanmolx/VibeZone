@@ -18,23 +18,23 @@ const userSchema = new mongoose.Schema({
         type:String,
     },
     posts:{
-        type: [{type:mongoose.Schema.Types.ObjectId , ref:"Post"}],
+        type: [{type:mongoose.Schema.Types.ObjectId , ref:"post"}],
         default:[],
     },
     savedPosts:{
-        type: [{type:mongoose.Schema.Types.ObjectId , ref:"Post"}],
+        type: [{type:mongoose.Schema.Types.ObjectId , ref:"post"}],
         default:[],
     },
     likedPosts:{
-        type: [{type:mongoose.Schema.Types.ObjectId , ref:"Post"}],
+        type: [{type:mongoose.Schema.Types.ObjectId , ref:"post"}],
         default:[],
     },
     followers:{
-        type: [{type:mongoose.Schema.Types.ObjectId , ref:"User"}],
+        type: [{type:mongoose.Schema.Types.ObjectId , ref:"user"}],
         default:[],
     },
     following:{
-        type: [{type:mongoose.Schema.Types.ObjectId , ref:"User"}],
+        type: [{type:mongoose.Schema.Types.ObjectId , ref:"user"}],
         default:[],
     },
     createdAt:{
@@ -43,6 +43,6 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-const User = mongoose.models.users || mongoose.model("users" , userSchema);
+const User = mongoose.models.user || mongoose.model("user" , userSchema);
 
 export default User

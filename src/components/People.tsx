@@ -32,11 +32,12 @@ const People: React.FC<UserType> = ({ user , token }) => {
 
     async function handleFollow() {
         const response = await axios.post("/api/user/follow", { from: token, to: user._id })
+        setisFollowing(!isFollowing)
         if (response.data.status) {
-            setisFollowing(!isFollowing)
             await updateUser();
         }
         else{
+            setisFollowing(!isFollowing)
             toast.error(response.data.message)
         }
     }

@@ -23,11 +23,15 @@ interface UserType {
 interface PostType {
     caption: string;
     createdAt: string;
-    creator: string;
+    creator: {
+        _id: string,
+        name: string,
+        email: string,
+        imageUrl: string,
+        username: string
+    };
     likes: any[];
-    name: string;
     postImageUrl: string;
-    profilePhoto: string;
     username: string;
     __v: number;
     _id: string;
@@ -37,8 +41,8 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const id = params.id
 
-    let user: UserType = {_id: '',name: '',username: '',email: '',password: '',imageUrl: '',posts: [],savedPosts: [],likedPosts: [],followers: [],following: [],createdAt: new Date(),__v: 0};
-    let posts : PostType[] = []
+    let user: UserType = { _id: '', name: '', username: '', email: '', password: '', imageUrl: '', posts: [], savedPosts: [], likedPosts: [], followers: [], following: [], createdAt: new Date(), __v: 0 };
+    let posts: PostType[] = []
 
     const response = await axios.post(`${process.env.WEBSITE_URL}/api/user/me`, { token: id });
     const postsResponse = await axios.post(`${process.env.WEBSITE_URL}/api/post/user`, { token: id })
@@ -46,7 +50,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         user = response.data.message
         posts = Array.isArray(postsResponse.data.message) ? postsResponse.data.message : [postsResponse.data.message]
     }
-    
+
 
     return (
         <div className=' w-full h-full flex flex-col items-center gap-10 p-8 overflow-y-scroll no-scrollbar'>

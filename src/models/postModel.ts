@@ -4,19 +4,7 @@ const postSchema = new mongoose.Schema({
     creator:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
-        ref:"users"
-    },
-    name:{
-        type:String,
-        required:true
-    },
-    username:{
-        type:String,
-        required:true
-    },
-    profilePhoto:{
-        type:String,
-        required:true
+        ref:"user"
     },
     caption:{
         type:String,
@@ -27,7 +15,7 @@ const postSchema = new mongoose.Schema({
         required:true
     },
     likes:{
-        type:[{type:mongoose.Schema.Types.ObjectId , required:true , ref:'users'}],
+        type:[{type:mongoose.Schema.Types.ObjectId , required:true , ref:'user'}],
         default:[]
     },
     createdAt:{
@@ -36,6 +24,6 @@ const postSchema = new mongoose.Schema({
     }
 })
 
-const Post = mongoose.models.posts || mongoose.model("posts" , postSchema);
+const Post = mongoose.models.post || mongoose.model("post" , postSchema);
 
 export default Post

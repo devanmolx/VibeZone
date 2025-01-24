@@ -9,7 +9,8 @@ export async function POST(req:Request) {
     const posts = await Post.find({
         creator : token
     })
-    if(posts){
+    .populate("creator")
+    if (posts) {
         return Response.json({message:posts , staus:true})
     }
     else{

@@ -24,11 +24,15 @@ interface UserType {
 interface PostType {
     caption: string;
     createdAt: string;
-    creator: string;
+    creator: {
+        _id:string,
+        name: string,
+        email: string,
+        imageUrl: string,
+        username:string
+    };
     likes: any[];
-    name: string;
     postImageUrl: string;
-    profilePhoto: string;
     username: string;
     __v: number;
     _id: string;
