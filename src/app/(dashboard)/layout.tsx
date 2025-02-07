@@ -1,10 +1,6 @@
-import { Inter } from "next/font/google";
 import LeftSideBar from "@/components/LeftSideBar";
 import RightSideBar from "@/components/RightSideBar";
 import TopBar from "@/components/TopBar";
-import UserContextProvider from "../../context/UserContextProvider";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -13,19 +9,13 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en" className="no-scrollbar">
-      <body className={`${inter.className}`}>
-          <UserContextProvider>
-            <main className=" w-screen min-h-screen bg-[#1F1826] flex justify-between">
-              <LeftSideBar />
-              <div className=" w-full min-h-screen flex flex-col items-center p-3 md:p-8">
-                <TopBar />
-                {children}
-              </div>
-              <RightSideBar />
-            </main>
-          </UserContextProvider>
-      </body>
-    </html >
+    <main className=" w-screen min-h-screen bg-[#1F1826] flex justify-between">
+      <LeftSideBar />
+      <div className=" w-full min-h-screen flex flex-col items-center p-3 md:p-8">
+        <TopBar />
+        {children}
+      </div>
+      <RightSideBar />
+    </main>
   );
 }

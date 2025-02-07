@@ -6,9 +6,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import Loading from '@/components/Loading';
-import { UserContext } from '../../../context/UserContext';
 import useUpdateUser from '@/lib/updateUser';
+import { UserContext } from '@/context/UserContext/UserContext';
+import Loading from '@/app/loading';
 
 export default function Page() {
     const { user } = useContext(UserContext);

@@ -1,4 +1,4 @@
-import {createContext , useContext} from "react"
+import { createContext } from "react"
 
 interface UserType {
     _id: string;
@@ -21,8 +21,8 @@ type UserContextType = {
 };
 
 const UserContextDefaultValues: UserContextType = {
-    user: {_id: '',name: '',username: '',email: '',password: '',imageUrl: '',posts: [],savedPosts: [],likedPosts: [],followers: [],following: [],__v: 0},
-    setUser : () => {}
+    user: { _id: '', name: '', username: '', email: '', password: '', imageUrl: '', posts: [], savedPosts: [], likedPosts: [], followers: [], following: [], __v: 0 },
+    setUser: () => { }
 };
 
 export const UserContext = createContext<UserContextType>(UserContextDefaultValues);

@@ -21,7 +21,7 @@ interface Props {
     children: ReactNode;
 }
 
-const UserProvider = ({ children }: Props) => {
+const UserContextProvider = ({ children }: Props) => {
     const [user, setUser] = useState<UserType>({
         _id: '',
         name: '',
@@ -44,6 +44,6 @@ const UserProvider = ({ children }: Props) => {
     );
 };
 
-UserProvider.displayName = "UserProvider";
+// UserProvider.displayName = "UserProvider";
 
-export default UserProvider;
+export default UserContextProvider;

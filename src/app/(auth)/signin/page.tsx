@@ -1,13 +1,15 @@
 'use client'
 import Image from 'next/image'
-import React from 'react'
+import React, { useContext } from 'react'
 import logo from "@/asset/logo.png"
-import { getAuth, signInWithPopup, GoogleAuthProvider , GithubAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import app from '@/lib/Firebase';
-import { useCookies } from 'react-cookie';
+import { LoadingContext } from '@/context/LoadingContext/LoadingContext';
+import Loading from '@/app/loading';
+import Cookies from 'js-cookie';
 
 const auth = getAuth(app);
 
@@ -16,10 +18,11 @@ const Page = () => {
     const googleProvider = new GoogleAuthProvider();
     const githubProvider = new GithubAuthProvider();
     const router = useRouter();
-    const [cookie, setCookie] = useCookies();
+    const { isLoading, setIsLoading } = useContext(LoadingContext);
 
     async function signInGoogle() {
         const response = await signInWithPopup(auth, googleProvider)
+        setIsLoading(true)
 
         const res = await axios.post("/api/user/signin", JSON.stringify({
             name: response.user.displayName,
@@ -28,7 +31,7 @@ const Page = () => {
         }))
 
         if (res.data.status) {
-            setCookie('token', res.data.message, { path: '/' })
+            Cookies.set("token", res.data.message)
             router.push("/")
         }
         else {
@@ -38,6 +41,7 @@ const Page = () => {
 
     async function signInGithub() {
         const response = await signInWithPopup(auth, githubProvider)
+        setIsLoading(true);
 
         const res = await axios.post("/api/user/signin", JSON.stringify({
             name: response.user.displayName,
@@ -46,12 +50,18 @@ const Page = () => {
         }))
 
         if (res.data.status) {
-            setCookie('token', res.data.message, { path: '/' })
+            Cookies.set("token", res.data.message)
             router.push("/")
         }
         else {
             toast.error(res.data.error)
         }
+    }
+
+    if (isLoading) {
+        return (
+            <Loading />
+        )
     }
 
     return (
@@ -111,7 +121,6 @@ const Page = () => {
                     </div>
                 </div>
             </div>
-
         </div>
     )
 }

@@ -1,20 +1,18 @@
-"use client"
 import Post from '@/components/Post';
 import axios from 'axios';
-import React, { useState, useEffect, useContext } from 'react'
-import { ToastContainer, toast } from 'react-toastify';
+import { cookies } from 'next/headers';
+import React from 'react'
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from '../../../context/UserContext';
 
 interface PostType {
     caption: string;
     createdAt: string;
     creator: {
-        _id:string,
+        _id: string,
         name: string,
         email: string,
         imageUrl: string,
-        username:string
+        username: string
     };
     likes: any[];
     postImageUrl: string;
@@ -23,25 +21,18 @@ interface PostType {
     _id: string;
 }
 
-const Page = () => {
-    const {user} = useContext(UserContext)
-    const [posts, setPosts] = useState<PostType[]>();
+const Page = async () => {
 
-    useEffect(() => {
-        if (user._id) {
-            fetchPosts()
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+    let posts: PostType[] = [];
+
+    if (token) {
+        const response = await axios.post(`${process.env.WEBSITE_URL}/api/post/likedPosts`, { token })
+        if (response.data.status) {
+            posts = response.data.message;
         }
-    }, [user])
-
-    async function fetchPosts() {
-        if(user){
-            const response = await axios.post("/api/post/likedPosts", { token: user._id})
-            if (response.data.status) {
-                setPosts(response.data.message)
-            }
-            else {
-                toast.error(response.data.message)
-            }
+        else {
         }
     }
 
@@ -52,7 +43,6 @@ const Page = () => {
                     <Post post={post} key={post._id} />
                 ))}
             </div>
-            <ToastContainer />
         </div>
     )
 }

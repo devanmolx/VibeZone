@@ -1,7 +1,6 @@
-import { Inter } from "next/font/google";
 import "./global.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import LoadingContextProvider from "@/context/LoadingContext/LoadingContextProvider";
+import UserContextProvider from "@/context/UserContext/UserContextProvider";
 
 export default function RootLayout({
   children,
@@ -11,8 +10,12 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="no-scrollbar">
-      <body className={`${inter.className}`}>
-         {children}
+      <body>
+        <LoadingContextProvider>
+          <UserContextProvider>
+            {children}
+          </UserContextProvider>
+        </LoadingContextProvider>
       </body>
     </html >
   );

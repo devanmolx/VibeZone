@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useContext, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -7,7 +6,7 @@ import Image from 'next/image';
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import axios from 'axios';
-import { UserContext } from '@/context/UserContext';
+import { UserContext } from '@/context/UserContext/UserContext';
 
 interface PostProps {
     post: {
