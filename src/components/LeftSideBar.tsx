@@ -8,21 +8,7 @@ import LefSideBarComponent from "@/components/LefSideBarComponent"
 import UsernameModel from '@/components/UsernameModel';
 import { cookies } from 'next/headers'
 import UpdateUserDetails from './UpdateUserDetails';
-
-interface UserType {
-    _id: string;
-    name: string;
-    username: string;
-    email: string;
-    password: string;
-    imageUrl: string;
-    posts: string[];
-    savedPosts: string[];
-    likedPosts: string[];
-    followers: string[];
-    following: string[];
-    __v: number;
-}
+import { UserType } from '@/context/UserContext/UserContext';
 
 const Page = async () => {
 

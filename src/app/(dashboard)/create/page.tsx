@@ -1,14 +1,14 @@
 "use client"
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from "next/image";
 import add from "@/asset/add.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import useUpdateUser from '@/lib/updateUser';
 import { UserContext } from '@/context/UserContext/UserContext';
-import Loading from '@/app/loading';
+import Loading from '../loading';
+import { LoadingContext } from '@/context/LoadingContext/LoadingContext';
 
 export default function Page() {
     const { user } = useContext(UserContext);
@@ -16,9 +16,7 @@ export default function Page() {
     const [caption, setCaption] = useState("");
     const [image, setImage] = useState<File>();
     const [previewImage, setPreviewImage] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-
-    const updateUser = useUpdateUser();
+    const { isLoading, setIsLoading } = useContext(LoadingContext);
 
     function handleFileInputChange(event: React.ChangeEvent<HTMLInputElement>) {
         const files = event.target.files;
@@ -64,12 +62,11 @@ export default function Page() {
             });
 
             if (response.status === 200) {
-                await updateUser();
                 router.push("/profile/me");
             } else {
-                setIsLoading(false);
                 toast.error(response.data.message);
             }
+            setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
             toast.error("An error occurred while creating the post");

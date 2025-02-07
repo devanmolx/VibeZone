@@ -30,18 +30,23 @@ export default async function Home() {
 
   const token = cookieStore.get("token")?.value;
 
-  if (token) {
+  if (!token) {
+    redirect("/signin")
+  }
+
+  try {
 
     const response = await axios.post(`${process.env.WEBSITE_URL}/api/post/all`, JSON.stringify({ token }))
     if (response.data.status) {
+      console.log(response.data.message);
+      console.log(Array.isArray(response.data.message))
       posts = Array.isArray(response.data.message) ? response.data.message : [response.data.message];
     }
     else {
       toast.error(response.data.message)
     }
-  }
-  else {
-    redirect("/login")
+  } catch (error) {
+    console.log(error);
   }
 
 
@@ -51,7 +56,7 @@ export default async function Home() {
         <h1 className=" text-white text-3xl font-bold">Feed</h1>
       </div>
       <div className=" flex flex-col items-center">
-        {posts?.map(post => (
+        {posts && posts.map(post => (
           <Post post={post} key={post._id} />
         ))}
       </div>

@@ -8,8 +8,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import app from '@/lib/Firebase';
 import { LoadingContext } from '@/context/LoadingContext/LoadingContext';
-import Loading from '@/app/loading';
 import Cookies from 'js-cookie';
+import Loading from '@/app/(dashboard)/loading';
+import { UserContext } from '@/context/UserContext/UserContext';
 
 const auth = getAuth(app);
 
@@ -19,6 +20,7 @@ const Page = () => {
     const githubProvider = new GithubAuthProvider();
     const router = useRouter();
     const { isLoading, setIsLoading } = useContext(LoadingContext);
+    const { setUser } = useContext(UserContext)
 
     async function signInGoogle() {
         const response = await signInWithPopup(auth, googleProvider)
@@ -31,7 +33,8 @@ const Page = () => {
         }))
 
         if (res.data.status) {
-            Cookies.set("token", res.data.message)
+            setUser(res.data.user);
+            Cookies.set("token", res.data.token)
             router.push("/")
         }
         else {
@@ -50,7 +53,8 @@ const Page = () => {
         }))
 
         if (res.data.status) {
-            Cookies.set("token", res.data.message)
+            setUser(res.data.user);
+            Cookies.set("token", res.data.token)
             router.push("/")
         }
         else {

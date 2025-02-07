@@ -1,22 +1,9 @@
 'use client'
-import { UserContext } from '@/context/UserContext/UserContext'
+import { UserContext, UserType } from '@/context/UserContext/UserContext'
 import React, { useContext, useEffect } from 'react'
 
 interface PropType {
-    user: {
-        _id: string;
-        name: string;
-        username: string;
-        email: string;
-        password: string;
-        imageUrl: string;
-        posts: string[];
-        savedPosts: string[];
-        likedPosts: string[];
-        followers: string[];
-        following: string[];
-        __v: number;
-    }
+    user: UserType
 }
 
 const UpdateUserDetails: React.FC<PropType> = ({ user }) => {
