@@ -33,9 +33,9 @@ const Page = () => {
         }))
 
         if (res.data.status) {
+            window.location.href = "/";
             setUser(res.data.user);
             Cookies.set("token", res.data.token)
-            router.push("/")
         }
         else {
             toast.error(res.data.error)
@@ -53,9 +53,9 @@ const Page = () => {
         }))
 
         if (res.data.status) {
+            window.location.href = "/";
             setUser(res.data.user);
             Cookies.set("token", res.data.token)
-            router.push("/")
         }
         else {
             toast.error(res.data.error)
