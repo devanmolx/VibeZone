@@ -12,7 +12,7 @@ export async function POST(req: Request) {
         creator: { $ne: token },
     })
         .populate("creator")
-        .populate("comments")
+        // .populate("comments")
     if (post) {
         console.log(post)
         return Response.json({ message: post, status: true })
