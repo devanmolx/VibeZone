@@ -26,7 +26,7 @@ const Page = () => {
         const response = await signInWithPopup(auth, googleProvider)
         setIsLoading(true)
 
-        const res = await axios.post("/api/user/signin", JSON.stringify({
+        const res = await axios.post("https://anmolgarg.tech/api/user/signin", JSON.stringify({
             name: response.user.displayName,
             email: response.user.email,
             imageUrl: response.user.photoURL
