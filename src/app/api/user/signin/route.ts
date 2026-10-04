@@ -1,13 +1,13 @@
 import User from "@/models/userModel";
 import dbConnect from "@/lib/dbConnect";
-dbConnect();
 
 export async function POST(req: Request) {
     const body = await req.json();
     const { name, email, imageUrl } = body;
-
+    
     try {
-
+        await dbConnect();
+        
         const user = await User.findOne({ email })
         if (user) {
             return Response.json({ user: user, token: user._id, status: true })
