@@ -1,7 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import User from "@/models/userModel";
-import app from "@/lib/Firebase";
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { uploadImage } from "@/lib/cloudinary";
 
 export async function POST(req: Request) {
     await dbConnect();
@@ -19,12 +18,7 @@ export async function POST(req: Request) {
             return new Response(JSON.stringify({ message: "Username already exists", status: false }));
         }
         else {
-            const storage = getStorage(app);
-            const storageRef = ref(storage, `profileImages/${username}`);
-
-            await uploadBytes(storageRef, image);
-
-            const imageUrl = await getDownloadURL(ref(storage, `profileImages/${username}`));
+            const imageUrl = await uploadImage(image, "vibezone/profiles", username);
 
             const updatedUser = await User.findByIdAndUpdate(id, { username, imageUrl });
 
