@@ -46,9 +46,9 @@ const Post: React.FC<PostProps> = ({ post }) => {
 
     return (
         <>
-            <div className="bg-black flex flex-col items-center gap-4 p-4 md:p-8 rounded-lg mt-4 w-[90%] md:w-[600px] xl:w-[800px]">
+            <div className="bg-[#0E0B13] border border-white/10 shadow-xl flex flex-col items-center gap-4 p-4 md:p-6 rounded-2xl mt-4 w-[90%] md:w-[600px] xl:w-[800px]">
                 <div className="flex gap-4 w-full">
-                    <div className="w-[50px] h-[50px] bg-white rounded-full overflow-hidden">
+                    <div className="w-[50px] h-[50px] bg-white rounded-full overflow-hidden ring-2 ring-[#7C55E7]">
                         {pathname.split("/")[1] !== "profile" ?
                             <Link href={`/profile/${post.creator._id}`}>
                                 <Image src={post.creator.imageUrl} alt="" height={500} width={500} className=' w-full' />
@@ -71,10 +71,10 @@ const Post: React.FC<PostProps> = ({ post }) => {
                             <button onClick={() => { setExpanded(!expanded) }} className=' text-[#7C55E7] underline'>Read Less</button>
                         )}</p>
 
-                    <Image src={post.postImageUrl} alt="" width={5000} height={5000} className="w-full rounded-lg" />
+                    <Image src={post.postImageUrl} alt="" width={5000} height={5000} className="w-full rounded-xl" />
                 </div>
                 <div className=' text-white w-full'>
-                    <button className=' text-2xl font-bold' onClick={handleLike}>
+                    <button className=' text-2xl font-bold transition hover:scale-110 active:scale-90' onClick={handleLike}>
                         {isLiked ? <FaHeart className=' text-red-600' /> : <FaRegHeart />}
                     </button>
                 </div>

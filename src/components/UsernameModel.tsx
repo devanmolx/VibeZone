@@ -97,19 +97,20 @@ const UsernameModel: React.FC<PropsType> = ({ imageUrl, id }) => {
     }
 
     return (
-        <div className='flex items-center justify-center h-screen w-screen fixed z-50 backdrop-blur-sm'>
+        <div className='flex items-center justify-center h-screen w-screen fixed z-50 backdrop-blur-md bg-black/50'>
             <div className='flex flex-col items-center'>
-                <form className='flex flex-col gap-6 w-[90%] md:w-auto bg-black p-10 rounded-lg' onSubmit={handleSubmit}>
+                <form className='flex flex-col gap-6 w-[90%] md:w-auto bg-[#0E0B13] border border-white/10 shadow-2xl p-8 md:p-10 rounded-3xl' onSubmit={handleSubmit}>
+                    <div className='text-center'><h2 className='text-2xl font-bold text-white'>Set up your profile</h2><p className='text-sm text-gray-400'>Pick a photo and a username</p></div>
                     <label htmlFor="image" className='flex flex-col items-center cursor-pointer gap-5 w-full'>
-                        <p className='font-semibold text-lg text-white w-full'>Upload a Photo</p>
-                        <div className='w-[200px] h-[200px] object-fill flex items-center justify-center  overflow-hidden'>
+                        <p className='font-semibold text-sm text-[#B9A5FF] w-full text-center'>Click to change photo</p>
+                        <div className='w-[160px] h-[160px] mx-auto rounded-full ring-4 ring-[#7C55E7]/60 flex items-center justify-center overflow-hidden'>
                             <Image src={previewImage || imageUrl} alt='' height={5000} width={5000} className='w-full' />
                         </div>
                     </label>
                     <input className='hidden' type="file" id='image' name='image' onChange={handleFileInputChange} />
                     <label className='text-white text-lg font-semibold' htmlFor="username">Username</label>
-                    <input className='bg-[#1F1B25] p-3 rounded-lg text-white focus:outline-none' name="username" id="username" placeholder='Enter username' onChange={(e) => { setUsername(e.target.value) }} required />
-                    <button className='text-white w-full bg-[#7C55E7] p-2 rounded-lg text-lg font-semibold' type="submit">Submit</button>
+                    <input className='bg-white/5 border border-white/10 p-3 rounded-xl text-white focus:outline-none focus:border-[#7C55E7]' name="username" id="username" placeholder='Enter username' onChange={(e) => { setUsername(e.target.value) }} required />
+                    <button className='text-white w-full bg-gradient-to-r from-[#7C55E7] to-[#E2367C] p-3 rounded-xl text-lg font-semibold transition hover:opacity-90' type="submit">Submit</button>
                 </form>
             </div>
             <ToastContainer />

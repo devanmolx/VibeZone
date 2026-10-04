@@ -2,6 +2,11 @@ import "./global.css";
 import LoadingContextProvider from "@/context/LoadingContext/LoadingContextProvider";
 import UserContextProvider from "@/context/UserContext/UserContextProvider";
 
+export const metadata = {
+  title: "VibeZone",
+  description: "Share your vibe with the world.",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -9,7 +14,7 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en" className="no-scrollbar">
+    <html lang="en" className="no-scrollbar scroll-smooth">
       <body>
         <LoadingContextProvider>
           <UserContextProvider>
